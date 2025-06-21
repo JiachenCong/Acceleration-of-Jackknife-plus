@@ -26,11 +26,10 @@ for p=P_number
         Y_test=X_test*beta+randn(n_test,1);
         lambda=1;
         I=eye(p);
-        R_loo=zeros(n_train,1);%originial R_loo
-        R_hat_loo=zeros(n_train,1);%R_loo constructed by approximate estimator
+        R_loo=zeros(n_train,1);
+        R_hat_loo=zeros(n_train,1);
         pred_jk=zeros(n_test,2);
         pred_jkapp=zeros(n_test,2);
-        %Original Jackknife+
         tic;
         for i=1:n_train
             X_i = X([1:i-1, i+1:end], :);
@@ -54,7 +53,6 @@ for p=P_number
             pred_jk(j,2)=q_upper(upper,alpha);
         end
         total_time(r) = toc;
-        %Approximate jackknife+
         tic;
         J=X'*X+lambda*eye(p);
         beta_full = (X' * X + lambda * eye(p)) \ (X' * Y_train);
@@ -112,7 +110,6 @@ T_2=array2table(result_app, 'RowNames', rowNames, 'VariableNames', colNames);
 disp(T_2);
 writetable(T_1, 'JKplus_Results.xlsx', 'Sheet', 'Sheet1', 'WriteRowNames', true);
 writetable(T_2, 'JKplus_Results_app.xlsx', 'Sheet', 'Sheet2', 'WriteRowNames', true);
-%quantile functions
 function q_plus = q_upper(v, alpha)
     n = length(v);
     k = ceil((1 - alpha) * (n + 1));
